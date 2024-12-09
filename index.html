@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深海主页</title>
+    <style>
+        :root {
+            --deep-sea-dark: #000810;
+            --deep-sea-medium: #001025;
+            --deep-sea-light: #001f47;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(160deg, 
+                var(--deep-sea-dark) 0%,
+                var(--deep-sea-medium) 35%,
+                var(--deep-sea-light) 100%);
+            color: white;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .background > * {
+            pointer-events: auto;
+        }
+
+        #pageContainer {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        #pageContainer > * {
+            pointer-events: auto;
+        }
+
+        /* 星空样式 */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.9));
+            will-change: transform, opacity, box-shadow;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { 
+                transform: scale(0.8); 
+                opacity: calc(var(--base-opacity) * 0.6);
+                box-shadow: 
+                    0 0 var(--size) rgba(255, 255, 255, calc(var(--base-opacity) * 0.3)),
+                    0 0 calc(var(--size) * 2) rgba(255, 255, 255, calc(var(--base-opacity) * 0.1));
+                filter: brightness(0.8);
+            }
+            50% { 
+                transform: scale(1.3);
+                opacity: 1;
+                box-shadow: 
+                    0 0 calc(var(--size) * 2) rgba(255, 255, 255, 0.9),
+                    0 0 calc(var(--size) * 4) rgba(255, 255, 255, 0.4);
+                filter: brightness(1.5);
+            }
+        }
+
+        /* 添加鼠标特效相关样式 */
+        .mouse-trail {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 10000;
+        }
+
+        /* 添加音频控制按钮样式 */
+        .audio-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .audio-control:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: none;
+        }
+
+        .audio-control::before {
+            content: '🎵';
+            font-size: 20px;
+            opacity: 0.8;
+        }
+
+        .audio-control.playing::before {
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* 基础样式 */
+        .floating-img {
+            position: absolute;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+            z-index: 1001;
+            overflow: hidden;
+        }
+
+        .floating-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 左侧图片独立样式 */
+        #leftImage {
+            left: 20vw;
+            bottom: 8vh;
+        }
+
+        /* 修改右侧图片独立样式 */
+        #rightImage {
+            right: 20vw;
+            bottom: 8vh;
+        }
+
+        .floating-img:hover {
+            transform: scale(1.2);
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
+        }
+
+        @keyframes spinLeft {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+        }
+
+        @keyframes spinRight {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .floating-img.spinning-left {
+            animation: spinLeft 1s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+        }
+
+        .floating-img.spinning-right {
+            animation: spinRight 1s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+            transform-origin: center center;
+        }
+
+        .signature {
+            position: fixed;
+            bottom: 3%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            z-index: 1000;
+            white-space: nowrap;
+        }
+
+        .heart {
+            display: inline-block;
+            color: #ff69b4;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        .author {
+            display: inline-block;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            animation: glow 2s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        @keyframes glow {
+            0%, 100% { 
+                filter: brightness(1);
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            }
+            50% { 
+                filter: brightness(1.5);
+                text-shadow: 
+                    0 0 10px rgba(255, 255, 255, 0.8),
+                    0 0 20px rgba(255, 255, 255, 0.8),
+                    0 0 30px rgba(255, 255, 255, 0.4);
+            }
+        }
+
+        /* 右侧图片在第一页特殊效果 */
+        #rightImage.first-page-active {
+            animation: glowPulseFirst 1.2s infinite;
+        }
+
+        /* 第一页特殊的发光效果 */
+        @keyframes glowPulseFirst {
+            0%, 100% {
+                filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.6));
+                transform: scale(1);
+            }
+            50% {
+                filter: drop-shadow(0 0 45px rgba(255, 255, 255, 0.9));
+                transform: scale(1.15);
+            }
+        }
+
+        /* 其他页面的普通发光效果 */
+        @keyframes glowPulse {
+            0%, 100% {
+                filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.4));
+                transform: scale(1);
+            }
+            50% {
+                filter: drop-shadow(0 0 35px rgba(255, 255, 255, 0.8));
+                transform: scale(1.1);
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/map/js/china.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jasondavies/d3-cloud/build/d3.layout.cloud.js"></script>
+    <script src="js/basePage.js"></script>
+    <script src="js/page1.js"></script>
+    <script src="js/page2.js"></script>
+    <script src="js/page3.js"></script>
+    <script src="js/page4.js"></script>
+    <script src="js/page5.js"></script>
+    <script src="js/page6.js"></script>
+    <script src="js/page7.js"></script>
+    <script src="js/page8.js"></script>
+    <script src="js/page9.js"></script>
+    <script src="js/page10.js"></script>
+    <script src="js/page11.js"></script>
+    <script src="js/page12.js"></script>
+    <script src="js/page13.js"></script>
+    <script src="js/page14.js"></script>
+    <script src="js/page15.js"></script>
+    <script src="js/page16.js"></script>
+    <script src="js/page17.js"></script>
+    <script src="js/page18.js"></script>
+    <script src="js/page19.js"></script>
+    <script src="js/page20.js"></script>
+    <script src="js/page21.js"></script>
+    <script src="js/page22.js"></script>
+    <script src="js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
+    <script src="js/page23.js"></script>
+    <script src="js/page24.js"></script>
+</head>
+<body>
+    <div class="background">
+        <div class="stars"></div>
+        <div class="floating-img" id="leftImage">
+            <img src="resource/1.jpg" alt="左侧图片">
+        </div>
+        <div class="floating-img" id="rightImage">
+            <img src="resource/2.jpg" alt="右侧图片">
+        </div>
+    </div>
+    <div id="pageContainer"></div>
+
+    <!-- 添加音频控制按钮和音频元素 -->
+    <div class="audio-control"></div>
+    <audio id="bgMusic" loop>
+        <source src="resource/background.mp3" type="audio/mp3">
+    </audio>
+
+    <div class="signature">
+        Created with <span class="heart">❤</span> by <span class="author">yanshen</span>
+    </div>
+
+    <script>
+        function generateStars() {
+            const stars = document.querySelector('.stars');
+            let style = document.createElement('style');
+            
+            let starStyles = '';
+            for (let i = 0; i < 100; i++) {
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const size = 1 + Math.random() * 3;
+                const baseOpacity = 0.4 + Math.random() * 0.6;
+                const delay = Math.random() * -8;
+                const duration = 1.5 + Math.random() * 4;
+
+                starStyles += `
+                    .star-${i} {
+                        left: ${x}%;
+                        top: ${y}%;
+                        width: ${size}px;
+                        height: ${size}px;
+                        opacity: ${baseOpacity};
+                        --base-opacity: ${baseOpacity};
+                        --size: ${size}px;
+                        animation: twinkle ${duration}s infinite ${delay}s;
+                        box-shadow: 
+                            0 0 ${size}px rgba(255, 255, 255, ${baseOpacity * 0.8}),
+                            0 0 ${size * 2}px rgba(255, 255, 255, ${baseOpacity * 0.4});
+                    }
+                `;
+
+                const star = document.createElement('div');
+                star.className = `star star-${i}`;
+                stars.appendChild(star);
+            }
+
+            style.textContent = starStyles;
+            document.head.appendChild(style);
+        }
+
+        // 添加粒子类
+        class Particle {
+            constructor(x, y, color, isClickParticle = false) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.size = Math.random() * 3 + 2;
+                
+                if (isClickParticle) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = Math.random() * 5 + 3.5;
+                    this.speedX = Math.cos(angle) * speed;
+                    this.speedY = Math.sin(angle) * speed - 3.5;
+                    this.gravity = 0.2;
+                    this.life = 3.0;
+                    this.decayRate = 0.01;
+                    this.friction = 0.995;
+                } else {
+                    this.speedX = Math.random() * 6 - 3;
+                    this.speedY = Math.random() * 6 - 3;
+                    this.gravity = 0;
+                    this.life = 1;
+                    this.decayRate = 0.02;
+                    this.friction = 0.98;
+                }
+                
+                this.alpha = 1;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.speedY += this.gravity;
+                this.speedX *= this.friction;
+                this.speedY *= this.friction;
+                this.life -= this.decayRate;
+                this.alpha = this.life;
+                this.size *= 0.97;
+            }
+
+            draw(ctx) {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function initMouseParticles() {
+            const colors = ['#ff0000', '#ff69b4', '#ff1493', '#ff00ff', '#9400d3', '#4b0082'];
+            let particles = [];
+            
+            const canvas = document.createElement('canvas');
+            canvas.className = 'mouse-trail';
+            document.body.appendChild(canvas);
+            const ctx = canvas.getContext('2d');
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            let lastX = 0;
+            let lastY = 0;
+            let isFirstMove = true;
+
+            document.addEventListener('mousemove', (e) => {
+                if (isFirstMove) {
+                    lastX = e.clientX;
+                    lastY = e.clientY;
+                    isFirstMove = false;
+                    return;
+                }
+
+                const dx = e.clientX - lastX;
+                const dy = e.clientY - lastY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                const particleCount = Math.floor(distance / 4);
+                for (let i = 0; i < particleCount; i++) {
+                    const x = lastX + (dx * i / particleCount);
+                    const y = lastY + (dy * i / particleCount);
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    particles.push(new Particle(x, y, color));
+                }
+
+                lastX = e.clientX;
+                lastY = e.clientY;
+            });
+
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('nav-button')) return;
+                
+                for (let i = 0; i < 180; i++) {
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    particles.push(new Particle(e.clientX, e.clientY, color, true));
+                }
+            });
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                particles = particles.filter(particle => {
+                    particle.update();
+                    particle.draw(ctx);
+                    return particle.life > 0;
+                });
+
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        function setupAudio() {
+            const bgMusic = document.getElementById('bgMusic');
+            const audioControl = document.querySelector('.audio-control');
+            bgMusic.volume = 0.5;
+            
+            let audioInitialized = false;
+
+            // 监听音频加载完成事件
+            bgMusic.addEventListener('canplaythrough', () => {
+                console.log('音频加载完成，等待用户交互');
+            });
+
+            // 监听音频播放错误
+            bgMusic.addEventListener('error', (e) => {
+                console.error('音频加载失败:', e);
+                audioControl.style.display = 'none';
+            });
+
+            // 监听音频结束事件
+            bgMusic.addEventListener('ended', () => {
+                if (audioInitialized) {
+                    bgMusic.play().catch(console.error);
+                }
+            });
+
+            // 监听全局点击事件来初音频
+            document.addEventListener('click', () => {
+                if (!audioInitialized) {
+                    bgMusic.play()
+                        .then(() => {
+                            audioInitialized = true;
+                            audioControl.classList.add('playing');
+                            console.log('背景音乐开始播放');
+                        })
+                        .catch(error => {
+                            console.log('音频播放失败:', error);
+                        });
+                }
+            }, { once: true });
+
+            // 移除频控制按钮的点击事件
+            audioControl.addEventListener('click', (e) => {
+                e.stopPropagation(); // 自然阻止事件冒泡
+            });
+
+            // 只保留播放状态的动
+            bgMusic.addEventListener('play', () => {
+                audioControl.classList.add('playing');
+            });
+        }
+
+        // 在现有代码中加翻页控制
+        class PageControl {
+            constructor() {
+                this.currentPage = 1;
+                this.totalPages = 24;
+                this.isAnimating = false;
+            }
+
+            async changePage(direction, pages = 1) {
+                if (this.isAnimating) return;
+                this.isAnimating = true;
+
+                const targetPage = direction === 'prev' 
+                    ? Math.max(1, this.currentPage - pages)
+                    : Math.min(this.totalPages, this.currentPage + pages);
+
+                if (targetPage !== this.currentPage) {
+                    this.currentPage = targetPage;
+                    try {
+                        if (window.pageManager) {
+                            window.pageManager.showPage(this.currentPage);
+                        }
+                    } catch (error) {
+                        console.error('页面切换失败:', error);
+                    }
+                }
+
+                setTimeout(() => {
+                    this.isAnimating = false;
+                }, 500); // 减少动画锁定时间以支持快速翻页
+            }
+        }
+
+        // 页面加载成后初始化所有效果
+        window.addEventListener('DOMContentLoaded', () => {
+            // 确保 PageManager 最初始化
+            window.pageManager = new PageManager();
+            
+            // 初始化页面控制器
+            const pageControl = new PageControl();
+            window.pageManager.setPageControl(pageControl);
+            
+            generateStars();
+            initMouseParticles();
+            setupAudio();
+            
+            // 后初始化浮动图片
+            const images = document.querySelectorAll('.floating-img');
+            let lastClickTime = 0;
+            const CLICK_THRESHOLD = 300; // 连续点击的时间阈值（毫秒）
+            let clickCount = 0;
+
+            images.forEach((img, index) => {
+                img.addEventListener('click', function(e) {
+                    const currentTime = Date.now();
+                    
+                    // 检查是否是快速连续点击
+                    if (currentTime - lastClickTime < CLICK_THRESHOLD) {
+                        clickCount++;
+                    } else {
+                        clickCount = 1;
+                    }
+                    lastClickTime = currentTime;
+
+                    // 移除之前的旋转动画
+                    this.classList.remove('spinning-left', 'spinning-right');
+                    void this.offsetWidth; // 触发重排以重置动画
+
+                    // 添加旋转动画
+                    if (index === 0) {
+                        this.classList.add('spinning-left');
+                        // 根据连续点击次数决定翻页数量
+                        const pagesToMove = Math.min(clickCount, pageManager.currentPage - 1);
+                        if (pagesToMove > 0) {
+                            pageControl.changePage('prev', pagesToMove);
+                        }
+                    } else {
+                        this.classList.add('spinning-right');
+                        // 根据连续点击次数决定翻页数量
+                        const pagesToMove = Math.min(clickCount, pageManager.totalPages - pageManager.currentPage);
+                        if (pagesToMove > 0) {
+                            pageControl.changePage('next', pagesToMove);
+                        }
+                    }
+                });
+
+                // 添加画结束
+                img.addEventListener('animationend', function(e) {
+                    if (e.animationName === 'spinLeft' || e.animationName === 'spinRight') {
+                        this.classList.remove('spinning-left', 'spinning-right');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
+</html> 
