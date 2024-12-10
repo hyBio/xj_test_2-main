@@ -23,6 +23,11 @@ class Page4 extends BasePage {
         `;
     }
 
+
+    async loadMapData() {
+        return window.CHINA_MAP_DATA;
+    }
+
     async initAndZoomMap() {
         try {
             const mapContainer = this.element.querySelector('#map-container');
@@ -56,11 +61,6 @@ class Page4 extends BasePage {
         } catch (error) {
             console.error('地图初始化失败:', error);
         }
-    }
-
-    async loadMapData() {
-        return await fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json')
-            .then(response => response.json());
     }
 
     setBaseOption() {
