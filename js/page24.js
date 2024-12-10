@@ -100,7 +100,7 @@ class Page24 extends BasePage {
             const x = Math.random() * this.canvas.width;
             const y = Math.random() * (this.canvas.height * 0.6);
             this.createFirework(x, y);
-        }, 800);
+        }, 500);
     }
 
     stopAutoFireworks() {

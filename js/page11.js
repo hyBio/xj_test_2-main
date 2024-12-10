@@ -70,7 +70,7 @@ class Page11 extends BasePage {
     async showTexts() {
         const texts = [
             { text: "主动", isHighlight: true },
-            { text: "才是必杀技", isHighlight: false }
+            { text: "才有后文", isHighlight: false }
         ];
         
         texts.forEach(textConfig => {

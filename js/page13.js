@@ -31,7 +31,7 @@ class Page13 extends BasePage {
     async showText() {
         const texts = [
             { text: "看看", isHighlight: true },
-            { text: "都在聊什么", isHighlight: false }
+            { text: "都喜欢聊什么", isHighlight: false }
         ];
         
         const textContainer = document.createElement('div');

@@ -69,7 +69,7 @@ class Page21 extends BasePage {
 
     async showTexts() {
         const texts = [
-            { text: "希望你们能一直", isHighlight: false },
+            { text: `希望你和${BasePage.sharedData.my_name}能一直`, isHighlight: false },
             { text: "保持", isHighlight: true },
             { text: "这样的关系", isHighlight: false }
         ];

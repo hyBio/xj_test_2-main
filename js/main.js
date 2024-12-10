@@ -98,6 +98,7 @@ class PageManager {
         const nextPageObj = this.pages[pageNumber];
 
         if (!nextPageObj) {
+
             console.error(`Page ${pageNumber} not found`);
             return;
         }
@@ -115,6 +116,7 @@ class PageManager {
             this.updateDebugInfo();
         });
         this.updateFloatingImages(pageNumber);
+
     }
 
     updateFloatingImages(pageNumber) {

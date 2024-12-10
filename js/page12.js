@@ -233,8 +233,7 @@ class Page12 extends BasePage {
 
     async showTexts() {
         const texts = [
-            { text: "两只", isHighlight: false },
-            { text: "小夜猫", isHighlight: true }
+            { text: "小夜猫x2", isHighlight: true }
         ];
         
         const textContainer = document.createElement('div');

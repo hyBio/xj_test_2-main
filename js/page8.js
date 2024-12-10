@@ -159,7 +159,7 @@ class Page8 extends BasePage {
 
     async showTexts() {
         const texts = [
-            { text: "全是干货，", isHighlight: false },
+            { text: "只说新鲜事儿，", isHighlight: false },
             { text: "不唠叨", isHighlight: true }
         ];
         

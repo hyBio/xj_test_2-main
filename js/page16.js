@@ -48,7 +48,7 @@ class Page16 extends BasePage {
         
         const numberText = document.createElement('div');
         numberText.className = 'big-number';
-        numberText.textContent = '958';
+        numberText.textContent = '958枚';
         
         const subLabel = document.createElement('div');
         subLabel.className = 'sub-label';

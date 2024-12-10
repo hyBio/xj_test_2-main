@@ -44,7 +44,7 @@ class Page15 extends BasePage {
         
         const label = document.createElement('div');
         label.className = 'number-label';
-        label.textContent = `你一共对${BasePage.sharedData.my_name}发送了`;
+        label.textContent = `你一共对${BasePage.sharedData.my_name}扮了`;
         
         const numberText = document.createElement('div');
         numberText.className = 'big-number';
@@ -52,7 +52,7 @@ class Page15 extends BasePage {
         
         const subLabel = document.createElement('div');
         subLabel.className = 'sub-label';
-        subLabel.textContent = '个表情包';
+        subLabel.textContent = '次表情';
         
         numberContainer.appendChild(label);
         numberContainer.appendChild(numberText);

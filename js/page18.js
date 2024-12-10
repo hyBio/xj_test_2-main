@@ -48,7 +48,7 @@ class Page18 extends BasePage {
         
         const label = document.createElement('div');
         label.className = 'number-label';
-        label.textContent = '你们一共发送了';
+        label.textContent = `你和${BasePage.sharedData.my_name}一共发送了`;
         
         const numberText = document.createElement('div');
         numberText.className = 'big-number';

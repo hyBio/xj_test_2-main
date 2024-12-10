@@ -48,7 +48,7 @@ class Page19 extends BasePage {
         
         const mainText = document.createElement('div');
         mainText.className = 'main-text';
-        mainText.textContent = '你们聊到了很晚';
+        mainText.textContent = `你和${BasePage.sharedData.my_name}聊到了很晚`;
         
         const subText = document.createElement('div');
         subText.className = 'sub-text';

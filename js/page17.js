@@ -44,15 +44,11 @@ class Page17 extends BasePage {
         
         const label = document.createElement('div');
         label.className = 'number-label';
-        label.textContent = '你最长的一条消息';
+        label.textContent = '你最长的一条消息字数';
         
         const numberText = document.createElement('div');
         numberText.className = 'big-number';
         numberText.textContent = '414';
-        
-        const subLabel = document.createElement('div');
-        subLabel.className = 'sub-label';
-        subLabel.textContent = '字';
         
         const contentLabel = document.createElement('div');
         contentLabel.className = 'content-label';
@@ -60,7 +56,6 @@ class Page17 extends BasePage {
         
         numberContainer.appendChild(label);
         numberContainer.appendChild(numberText);
-        numberContainer.appendChild(subLabel);
         numberContainer.appendChild(contentLabel);
         
         this.contentContainer.appendChild(numberContainer);
@@ -68,14 +63,13 @@ class Page17 extends BasePage {
         setTimeout(() => {
             numberText.classList.add('number-animated');
             label.classList.add('fade-in');
-            subLabel.classList.add('fade-in');
             contentLabel.classList.add('fade-in');
         }, 100);
     }
 
     async showTexts() {
         const texts = [
-            { text: `让${BasePage.sharedData.my_name}笑一会儿`, isHighlight: false },
+            { text: `让${BasePage.sharedData.my_name}`, isHighlight: false },
             { text: "笑一会儿", isHighlight: true }
         ];
         

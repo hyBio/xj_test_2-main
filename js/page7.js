@@ -160,7 +160,6 @@ class Page7 extends BasePage {
 
     async showTexts() {
         const texts = [
-            { text: "文字多多，", isHighlight: false },
             { text: "情谊", isHighlight: false },
             { text: "满满", isHighlight: true }
         ];

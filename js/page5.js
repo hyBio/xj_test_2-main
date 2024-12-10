@@ -19,9 +19,8 @@ class Page5 extends BasePage {
                 </div>
                 <div class="text-layer">
                     <div class="text-container">
-                        <div class="text-line">第一次相遇是</div>
+                        <div class="text-line">了不起的开始</div>
                         <div class="text-line">
-                            <span class="highlight">2024</span>年
                             <span class="highlight">06</span>月
                             <span class="highlight">28</span>日
                         </div>
@@ -30,7 +29,7 @@ class Page5 extends BasePage {
             </div>
         `;
 
-        // 修改日历样式
+        // 修���日历样式
         const style = document.createElement('style');
         style.textContent = `
             .calendar {
@@ -39,6 +38,7 @@ class Page5 extends BasePage {
                 margin: 0 auto;
                 padding: 20px;
                 background: rgba(255, 255, 255, 0.1);
+                margin-top: 2rem;
             }
             
             .calendar-header {
@@ -73,18 +73,24 @@ class Page5 extends BasePage {
             
             .calendar-cell.highlight span {
                 display: inline-block;
-                background: linear-gradient(135deg, #ff9500, #ff5e3a);
+                background: linear-gradient(135deg, #ffb6e1, #ff98c3);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 font-weight: bold;
-                font-size: 1.2em;
-                animation: pulse 2s infinite;
-                text-shadow: 0 0 10px rgba(255, 149, 0, 0.5);
+                font-size: 1.5em;
+                animation: pulse 1s infinite;
+                
+                /* 多层文字阴影创造发光效果 */
+                text-shadow: 
+                    0 0 10px rgba(255, 182, 225, 0.8),
+                    0 0 20px rgba(255, 152, 195, 0.5),
+                    0 0 30px rgba(255, 203, 233, 0.3);
+                filter: drop-shadow(0 0 8px rgba(255, 182, 225, 0.5));
             }
             
             @keyframes pulse {
                 0% { transform: scale(1); }
-                50% { transform: scale(1.2); }
+                50% { transform: scale(2); }
                 100% { transform: scale(1); }
             }
         `;

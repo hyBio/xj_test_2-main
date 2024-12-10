@@ -14,9 +14,9 @@ class Page4 extends BasePage {
                 <div class="text-container">
                     <div class="text-mask">
                         <div class="text-line">很幸运</div>
-                        <div class="text-line">茫茫人海之中</div>
+                        <div class="text-line">相聚</div>
                         <div class="text-line highlight">1079.4km</div>
-                        <div class="text-line">还是彼此相识</div>
+                        <div class="text-line">还是被${BasePage.sharedData.my_name}找到</div>
                     </div>
                 </div>
             </div>
@@ -199,12 +199,12 @@ class Page4 extends BasePage {
                     effect: {
                         show: true,
                         period: 3,
-                        trailLength: 0.9,
-                        color: '#fff',
+                        trailLength: 0.3,
+                        color: '#ffc0cb',
                         symbolSize: 3
                     },
                     lineStyle: {
-                        color: '#fff',
+                        color: '#ffc0cb',
                         width: 1,
                         opacity: 0.1
                     }

@@ -87,7 +87,7 @@ class Page6 extends BasePage {
     createColorScale(dateValueMap) {
         return d3.scaleLinear()
             .domain([0, d3.max([...dateValueMap.values()])])
-            .range(["#FFC0CB", "#8B0000"]);
+            .range(["#FFFFFF", "#FF0000"]);
     }
 
     calculateLayout() {
@@ -118,10 +118,10 @@ class Page6 extends BasePage {
         const container = d3.select("#mainContent")
             .style("width", `${width}px`)
             .style("height", "100%")
-            .style("margin", "0 auto")
+            .style("margin", "20px auto 0")
             .style("display", "flex")
             .style("justify-content", "center")
-            .style("align-items", "center");
+            .style("align-items", "flex-start");
 
         // 创建SVG，使用完整宽度
         const svg = container

@@ -52,7 +52,7 @@ class Page10 extends BasePage {
         
         const subLabel = document.createElement('div');
         subLabel.className = 'sub-label';
-        subLabel.textContent = '条消息就会得到回复';
+        subLabel.textContent = '条消息收到回复';
         
         numberContainer.appendChild(label);
         numberContainer.appendChild(numberText);
@@ -70,8 +70,8 @@ class Page10 extends BasePage {
 
     async showTexts() {
         const texts = [
-            { text: "那种感觉应该很", isHighlight: false },
-            { text: "幸福", isHighlight: true }
+            { text: "反馈", isHighlight: true },
+            { text: "及时", isHighlight: false },
         ];
         
         texts.forEach(textConfig => {
